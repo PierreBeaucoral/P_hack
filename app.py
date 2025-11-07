@@ -25,7 +25,59 @@ A playful but serious web app where you can:
     """)
 
 # ----------------------- Utils -----------------------
+
 RANDOM_SEED = 42
+
+# ---- Helpers to detect/convert time columns (supports integer "year") ----
+def build_time_candidates(df: pd.DataFrame):
+    """
+    Return (df_with_converted_cols, time_col_names).
+    - Keeps native datetime64 columns.
+    - Converts columns whose name contains 'date'/'time' or 'year' and look like years (1800–2100)
+      into datetime via YYYY-01-01, exposing them as <col>__as_date.
+    - Also tries general to_datetime parsing for string-like date columns.
+    """
+    df = df.copy()
+    time_cols = []
+
+    # keep native datetimes
+    for c in df.columns:
+        if np.issubdtype(df[c].dtype, np.datetime64):
+            time_cols.append(c)
+
+    # detect/convert year/date-ish columns
+    for c in df.columns:
+        name = str(c).lower()
+
+        # fast path for explicit 'year' columns
+        if "year" in name and (pd.api.types.is_integer_dtype(df[c]) or pd.api.types.is_numeric_dtype(df[c])):
+            ser_num = pd.to_numeric(df[c], errors="coerce")
+            # consider it a year column if ≥80% look like years 1800–2100
+            if (ser_num.between(1800, 2100)).mean() >= 0.8:
+                cname = f"{c}__as_date"
+                # map year -> January 1st of that year
+                df[cname] = pd.to_datetime(ser_num.astype("Int64").astype(str), format="%Y", errors="coerce")
+                time_cols.append(cname)
+                continue
+
+        # generic date/time names: try parsing
+        if ("date" in name) or ("time" in name):
+            ser_parsed = pd.to_datetime(df[c], errors="coerce")
+            if ser_parsed.notna().mean() >= 0.6:  # if most rows parsed, accept
+                cname = f"{c}__as_date"
+                df[cname] = ser_parsed
+                time_cols.append(cname)
+
+    # de-duplicate while preserving order
+    seen = set()
+    time_cols_unique = []
+    for c in time_cols:
+        if c not in seen:
+            time_cols_unique.append(c)
+            seen.add(c)
+
+    return df, time_cols_unique
+
 rng = np.random.default_rng(RANDOM_SEED)
 
 FRIENDLY_VARS = [
@@ -588,25 +640,33 @@ with tab_viz:
         except Exception as e:
             st.info(f"Could not draw scatter matrix: {e}")
 
+    # --- Time-series explorer (now supports integer YEAR columns) ---
     st.markdown("### Time-series explorer")
-    time_cols = [c for c in df.columns if np.issubdtype(df[c].dtype, np.datetime64)] + \
-                [c for c in df.columns if "date" in c.lower() or "time" in c.lower()]
-    if time_cols:
-        tcol = st.selectbox("Time column", time_cols, index=0)
-        tsd = df.copy()
-        tsd[tcol] = pd.to_datetime(tsd[tcol], errors="coerce")
-        tsd = tsd.dropna(subset=[tcol]).sort_values(tcol)
-        y1 = st.selectbox("Series 1", num_for_corr, index=0)
-        y2 = st.selectbox("Series 2 (optional)", ["(none)"] + num_for_corr, index=0)
-        figts = go.Figure()
-        figts.add_trace(go.Scatter(x=tsd[tcol], y=tsd[y1], mode="lines", name=y1))
-        if y2 != "(none)":
-            figts.add_trace(go.Scatter(x=tsd[tcol], y=tsd[y2], mode="lines", name=y2, yaxis="y2"))
-            figts.update_layout(yaxis2=dict(overlaying="y", side="right"))
-        figts.update_layout(template="plotly_white", xaxis_title=str(tcol), yaxis_title=y1, height=450)
-        st.plotly_chart(figts, use_container_width=True)
+    df_ts, time_candidates = build_time_candidates(df)
+
+    if time_candidates:
+        tcol = st.selectbox("Time column", time_candidates, index=0, key="ts_timecol")
+        tsd = df_ts.dropna(subset=[tcol]).sort_values(tcol)
+        # choose series to plot
+        numeric_series = [c for c in df.columns if pd.api.types.is_numeric_dtype(df[c])]
+        if not numeric_series:
+            st.info("No numeric series to plot. Add some numeric columns.")
+        else:
+            y1 = st.selectbox("Series 1", numeric_series, index=0, key="ts_y1")
+            y2 = st.selectbox("Series 2 (optional)", ["(none)"] + numeric_series, index=0, key="ts_y2")
+
+            figts = go.Figure()
+            figts.add_trace(go.Scatter(x=tsd[tcol], y=tsd[y1], mode="lines", name=y1))
+            if y2 != "(none)":
+                figts.add_trace(go.Scatter(x=tsd[tcol], y=tsd[y2], mode="lines", name=y2, yaxis="y2"))
+                figts.update_layout(yaxis2=dict(overlaying="y", side="right"))
+            figts.update_layout(template="plotly_white",
+                                xaxis_title=str(tcol),
+                                yaxis_title=y1,
+                                height=450)
+            st.plotly_chart(figts, use_container_width=True)
     else:
-        st.info("No obvious time column found. Include a datetime column (e.g., 'date').")
+        st.info("No time-like column found. Add a datetime column or an integer 'year' column (e.g., 1990..2025).")
 
 # ----------------------- Footer -----------------------
 st.markdown("---")
