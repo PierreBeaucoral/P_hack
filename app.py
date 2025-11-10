@@ -12,18 +12,6 @@ hero("📈 HARKing + Regression Lab",
      "**A professional sandbox for exploring correlations, validating models, and visualizing data.** "
      "Use the sidebar to select data on each page. The pages menu is at the left (or top on mobile).")
 
-with st.container():
-    c1, c2, c3 = st.columns(3)
-    with c1:
-        st.markdown('<div class="card">**1) 🎣 HARKing**</div>', unsafe_allow_html=True)
-        st.caption("Brute-force Y~X with transforms, lags, bin-filters; min R²; early-stop; rank by p.")
-    with c2:
-        st.markdown('<div class="card">**2) 📐 Regression Lab**</div>', unsafe_allow_html=True)
-        st.caption("Choose outcome/predictors; dummies/standardization; coefficients + CIs; VIF; diagnostics.")
-    with c3:
-        st.markdown('<div class="card">**3) 📊 DataViz Studio**</div>', unsafe_allow_html=True)
-        st.caption("Correlation heatmap, scatter matrix, time-series explorer (supports integer year).")
-
 st.sidebar.markdown("### Pages")
 st.sidebar.caption("Use the selector at the top of the sidebar to switch pages. If links below aren't clickable on your host, they're just labels.")
 
