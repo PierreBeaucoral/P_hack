@@ -32,9 +32,9 @@ st.sidebar.info(
 )
 st.sidebar.markdown("### Pages")
 st.sidebar.page_link("app.py", label="🏠 Home")
-st.sidebar.page_link("pages/01_🎣_HARKing.py", label="🎣 HARKing")
-st.sidebar.page_link("pages/02_📐_Regression_Lab.py", label="📐 Regression Lab")
-st.sidebar.page_link("pages/03_📊_DataViz_Studio.py", label="📊 DataViz Studio")
+st.sidebar.page_link("pages/01_HARKing.py", label="🎣 HARKing")
+st.sidebar.page_link("pages/02_Regression_Lab.py", label="📐 Regression Lab")
+st.sidebar.page_link("pages/03_DataViz_Studio.py", label="📊 DataViz Studio")
 st.sidebar.caption(f"Streamlit {st.__version__} · Python {sys.version.split()[0]}")
 
 
