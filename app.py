@@ -24,18 +24,21 @@ with st.container():
         st.markdown('<div class="card">**3) 📊 DataViz Studio**</div>', unsafe_allow_html=True)
         st.caption("Correlation heatmap, scatter matrix, time-series explorer (supports integer year).")
 
-st.sidebar.info(
-    "Quick start:\n"
-    "• Open **🎣 HARKing** → keep defaults → run.\n"
-    "• Validate in **📐 Regression Lab**.\n"
-    "• Explore **📊 DataViz**."
-)
 st.sidebar.markdown("### Pages")
-st.sidebar.page_link("app.py", label="🏠 Home")
-st.sidebar.page_link("pages/01_HARKing.py", label="🎣 HARKing")
-st.sidebar.page_link("pages/02_Regression_Lab.py", label="📐 Regression Lab")
-st.sidebar.page_link("pages/03_DataViz_Studio.py", label="📊 DataViz Studio")
-st.sidebar.caption(f"Streamlit {st.__version__} · Python {sys.version.split()[0]}")
+st.sidebar.caption("Use the selector at the top of the sidebar to switch pages. If links below aren't clickable on your host, they're just labels.")
+
+# Try clickable links; if not supported in this environment, fall back to plain labels
+def safe_page_link(path: str, label: str):
+    try:
+        # Works on recent Streamlit, fails gracefully otherwise
+        st.sidebar.page_link(path, label=label)  # may raise KeyError('url_pathname') on some hosts
+    except Exception:
+        st.sidebar.markdown(f"- {label}")
+
+safe_page_link("app.py", "🏠 Home")
+safe_page_link("pages/01_HARKing.py", "🎣 HARKing")
+safe_page_link("pages/02_Regression_Lab.py", "📐 Regression Lab")
+safe_page_link("pages/03_DataViz_Studio.py", "📊 DataViz Studio")
 
 
 st.markdown("---")
