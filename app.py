@@ -8,10 +8,6 @@ if not skip_css:
 st.set_page_config(page_title="HARKing + Regression Lab", page_icon="📈", layout="wide")
 apply_global_style()
 
-hero("📈 HARKing + Regression Lab",
-     "**A professional sandbox for exploring correlations, validating models, and visualizing data.** "
-     "Use the sidebar to select data on each page. The pages menu is at the left (or top on mobile).")
-
 st.sidebar.markdown("### Pages")
 st.sidebar.caption("Use the selector at the top of the sidebar to switch pages. If links below aren't clickable on your host, they're just labels.")
 
