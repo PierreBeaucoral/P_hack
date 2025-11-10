@@ -27,35 +27,6 @@ safe_page_link("pages/04_MultiX_HARKing.py", "🧪 Multivariate HARKing (main X 
 safe_page_link("pages/02_Regression_Lab.py", "📐 Regression Lab")
 safe_page_link("pages/03_DataViz_Studio.py", "📊 DataViz Studio")
 
-# ---------------
-# Hero / Overview
-# ---------------
-hero(
-    "📈 HARKing + Regression Lab",
-    "**A professional sandbox for exploring correlations, validating models, and visualizing data.** "
-    "Use the sidebar to navigate pages. Upload your CSV on any page that asks for it, or use the simulator."
-)
-
-# -------------
-# Feature cards
-# -------------
-with st.container():
-    # Two rows of cards for better responsiveness
-    c1, c2 = st.columns(2)
-    with c1:
-        st.markdown('<div class="card">**1) 🎣 HARKing (single X)**</div>', unsafe_allow_html=True)
-        st.caption("Brute-force Y~X with transforms, lags, and bin-filters; min R²; early-stop; rank by p.")
-    with c2:
-        st.markdown('<div class="card">**2) 🧪 Multivariate HARKing (main X + controls)**</div>', unsafe_allow_html=True)
-        st.caption("Hunts for a significant main regressor while trying many control sets; ranks by p(main X), filters on model R²; partial regression plot.")
-    c3, c4 = st.columns(2)
-    with c3:
-        st.markdown('<div class="card">**3) 📐 Regression Lab**</div>', unsafe_allow_html=True)
-        st.caption("Choose outcome/predictors; dummies/standardization; coefficients + CIs; VIF; full diagnostics.")
-    with c4:
-        st.markdown('<div class="card">**4) 📊 DataViz Studio**</div>', unsafe_allow_html=True)
-        st.caption("Correlation heatmap, scatter matrix, time-series explorer (supports datetime or integer `year`).")
-
 st.markdown("## 👋 Welcome — What this app is and isn’t")
 st.markdown("""
 This site is a **hands-on sandbox** to (i) deliberately **HARK** (Hypothesizing After Results are Known) and 
