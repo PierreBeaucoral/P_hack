@@ -1,0 +1,7 @@
+[theme]
+base="light"
+primaryColor="#2563EB"          # Indigo-600
+backgroundColor="#FFFFFF"
+secondaryBackgroundColor="#F6F8FB"  # Light gray/blue panel
+textColor="#0F172A"             # Slate-900
+font="sans serif"
