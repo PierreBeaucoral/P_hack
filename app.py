@@ -1,6 +1,10 @@
 import streamlit as st
 from utils.style import apply_global_style, hero
 
+skip_css = "nocss" in st.query_params  # visit ?nocss=1 to disable custom CSS
+if not skip_css:
+    st.markdown("""<style> ... your CSS ... </style>""", unsafe_allow_html=True)
+
 st.set_page_config(page_title="HARKing + Regression Lab", page_icon="📈", layout="wide")
 apply_global_style()
 
