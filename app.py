@@ -1,4 +1,4 @@
-import streamlit as st
+import streamlit as st, sys
 from utils.style import apply_global_style, hero
 
 skip_css = "nocss" in st.query_params  # visit ?nocss=1 to disable custom CSS
@@ -30,6 +30,13 @@ st.sidebar.info(
     "• Validate in **📐 Regression Lab**.\n"
     "• Explore **📊 DataViz**."
 )
+st.sidebar.markdown("### Pages")
+st.sidebar.page_link("app.py", label="🏠 Home")
+st.sidebar.page_link("pages/01_🎣_HARKing.py", label="🎣 HARKing")
+st.sidebar.page_link("pages/02_📐_Regression_Lab.py", label="📐 Regression Lab")
+st.sidebar.page_link("pages/03_📊_DataViz_Studio.py", label="📊 DataViz Studio")
+st.sidebar.caption(f"Streamlit {st.__version__} · Python {sys.version.split()[0]}")
+
 
 st.markdown("---")
 st.caption("Made for teaching and exploration. Don’t use HARKed findings for policy/clinical decisions.")
