@@ -6,3 +6,5 @@ statsmodels
 scipy
 tabulate
 python-docx
+huggingface_hub
+llama-cpp-python
