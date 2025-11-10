@@ -10,7 +10,6 @@ import statsmodels.api as sm
 import plotly.io as pio
 import streamlit as st
 # ----------------------- Page -----------------------
-
 # Page meta
 st.set_page_config(
     page_title="HARKing + Regression Lab",
@@ -22,6 +21,8 @@ st.set_page_config(
         "About": "A teaching & exploration tool for model exploration, diagnostics, and data viz."
     }
 )
+
+st.title("🧪 HARKing Generator + 📊 Regression & Viz Lab")
 
 # Plotly defaults (font, template, colorway)
 pio.templates.default = "plotly_white"
