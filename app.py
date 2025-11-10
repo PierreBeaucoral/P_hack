@@ -7,10 +7,104 @@ import plotly.graph_objects as go
 import plotly.express as px
 from scipy.stats import probplot
 import statsmodels.api as sm
-
+import plotly.io as pio
+import streamlit as st
 # ----------------------- Page -----------------------
-st.set_page_config(page_title="HARKing + Regression Lab", layout="wide")
-st.title("🧪 HARKing Generator + 📊 Regression & Viz Lab")
+
+# Page meta
+st.set_page_config(
+    page_title="HARKing + Regression Lab",
+    page_icon="📈",
+    layout="wide",
+    menu_items={
+        "Get Help": "mailto:pierre.beaucoral@uca.fr",
+        "Report a bug": "mailto:pierre.beaucoral@uca.fr",
+        "About": "A teaching & exploration tool for model exploration, diagnostics, and data viz."
+    }
+)
+
+# Plotly defaults (font, template, colorway)
+pio.templates.default = "plotly_white"
+pio.templates["pro_theme"] = pio.templates["plotly_white"]
+pio.templates.default = "pro_theme"
+
+# Optional: set a cohesive colorway
+pio.templates["pro_theme"].layout.colorway = [
+    "#2563EB", "#0EA5E9", "#22C55E", "#F59E0B", "#EF4444", "#8B5CF6", "#06B6D4"
+]
+pio.templates["pro_theme"].layout.font.family = "Inter, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Helvetica Neue, Arial, sans-serif"
+pio.templates["pro_theme"].layout.font.size = 14
+
+# Global CSS for polish
+st.markdown("""
+<style>
+/* Body + headings */
+html, body, [class*="css"]  {
+  letter-spacing: 0.1px;
+}
+h1, h2, h3 {
+  font-weight: 700 !important;
+  letter-spacing: 0.2px;
+}
+h4, h5, h6 {
+  font-weight: 600 !important;
+}
+
+/* Hero / header block */
+.hero {
+  padding: 1.25rem 1.5rem;
+  background: linear-gradient(135deg, #eef3ff 0%, #f7fafc 100%);
+  border: 1px solid #e6ecf8;
+  border-radius: 14px;
+  margin-bottom: 1rem;
+}
+
+/* Card containers */
+.card {
+  padding: 1rem 1.1rem;
+  background: #FFFFFF;
+  border: 1px solid #E6ECF8;
+  border-radius: 14px;
+  box-shadow: 0 1px 2px rgba(16,24,40,.04);
+  margin-bottom: 1rem;
+}
+
+/* Dataframe polish */
+.stDataFrame table {
+  border-collapse: collapse !important;
+}
+.stDataFrame tbody tr:hover {
+  background-color: #F6F8FB !important;
+}
+.stDataFrame th, .stDataFrame td {
+  border-bottom: 1px solid #EDF2F7 !important;
+}
+
+/* Buttons */
+.stButton>button, .stDownloadButton>button {
+  border-radius: 10px !important;
+  padding: .6rem 1rem !important;
+  border: 1px solid #DCE3F0 !important;
+}
+
+/* Expander */
+.streamlit-expanderHeader {
+  font-weight: 600;
+}
+
+/* Tabs spacing */
+.stTabs [data-baseweb="tab-list"] {
+  gap: .5rem;
+}
+.stTabs [data-baseweb="tab"] {
+  background: #FFFFFF;
+  border: 1px solid #E6ECF8;
+  border-radius: 10px;
+  padding: .5rem 0.9rem;
+}
+</style>
+""", unsafe_allow_html=True)
+
 
 # ----------------------- About / Help -----------------------
 with st.expander("ℹ️ About this app (short version)", expanded=False):
